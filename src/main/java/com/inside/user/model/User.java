@@ -1,34 +1,51 @@
-package com.inside.user;
+package com.inside.user.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import com.inside.user.Validator.Age;
+import com.inside.user.Validator.Authorized;
 
 @Entity
 @Table(name = "users")
 public class User {
+    public static final String[] AUTHORIZEDCOUNTRIES = new String[]{"France"};
+    public static final String[] AUTHORIZEDGENDERS = new String[]{"M","F"};
+    public static final long AGEMIN = 18;
+
+
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
-    
+    @NotEmpty(message = "Name cannot be empty")
     @Column(name = "name")
     private String name;
     
+    @NotNull(message = "Birth Date cannot be empty")
+    @Age(AGEMIN)
     @Column(name = "birthDate")
-    private Date birthDate;
+    private LocalDate birthDate;
     
+    @NotEmpty(message = "Country of Residence cannot be empty")
+    @Authorized("country")
     @Column(name = "countryOfResidence")
     private String countryOfResidence;
 
+    @NotNull
+    @Pattern(regexp = "^$|^((\\+)33|0)[1-9](\\d{2}){4}$", message = "Must be a valid French Phone Number : 0102030405")
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
+    @NotNull
+    @Authorized("gender")
     @Column(name = "gender")
     private String gender;
     
     public User(){}
 	
-    public User(String name, Date birthDate, String countryOfResidence, String phoneNumber, String gender) {
+    public User(String name, LocalDate birthDate, String countryOfResidence, String phoneNumber, String gender) {
 		this.name = name;
 		this.birthDate = birthDate;
 		this.countryOfResidence = countryOfResidence;
@@ -48,10 +65,10 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
     public String getCountryOfResidence() {
