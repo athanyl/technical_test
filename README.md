@@ -26,6 +26,6 @@ cd technical_test/
 
 There is a json file on the repository with the Postman collection needed for testing. You can run all the queries independently and see the result.
 
-## Copyright
 
 
+Thanks for reading and have a great day!
